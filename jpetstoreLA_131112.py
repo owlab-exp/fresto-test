@@ -11,6 +11,7 @@ httpUtilities = HTTPPluginControl.getHTTPUtilities()
 # Imports for Fresto
 import time
 from java.util import UUID
+from java.util import Random
 
 def timestr():
 	return str(int(round(time.time() * 1000)))
@@ -18,8 +19,8 @@ def timestr():
 appHost = 'beta.owlab.com'
 appPort = '8080'
 frestoHost = 'fresto1.owlab.com'
-frestoPort = '9999'
-clientIp = '180.229.124.46' #This IP Addres should be of load generator
+frestoPort = '9998'
+#clientIp = '180.229.124.46' #This IP Addres should be of load generator
 
 # UUID bucket for each thread to create and reuse UUID
 uuidList = []
@@ -30,6 +31,18 @@ def addUUID(index) :
 def getUUID(index) :
 	return uuidList[index]
 
+def getClientIp():
+    random = Random()
+    ip_address = '180.180.'
+    num_1 = random.nextInt(255)
+    num_2 = random.nextInt(254) + 1
+    ip_address += str(num_1)
+    ip_address += '.'
+    ip_address += str(num_2)
+
+    grinder.logger.info("ip_address = %s" % ip_address)
+
+    return ip_address
 # To use a proxy server, uncomment the next line and set the host and port.
 # connectionDefaults.setProxyServer("localhost", 8001)
 
@@ -639,6 +652,9 @@ request12803 = createRequest(Test(12803, 'GET fresto_link.js'), url0, headers41)
 class TestRunner:
   """A TestRunner instance is created for each worker thread."""
 
+  elapsedTime = 0
+  clientIp = ''
+
   # A method for each recorded page.
   def page1(self):
     """GET / (requests 101-105)."""
@@ -731,7 +747,7 @@ class TestRunner:
     """POST feedUIEvent (request 501)."""
     result = request501.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_REQUEST'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('referrer', 'http://beta.owlab.com:8080/jpetstoreLA/'),
 	NVPair('method', 'GET'),
         NVPair('uuid', addUUID(grinder.threadNumber)),
@@ -745,11 +761,11 @@ class TestRunner:
     """POST feedUIEvent (request 601)."""
     result = request601.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_RESPONSE'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('uuid', getUUID(grinder.threadNumber)),
         NVPair('targetUrl', 'http://beta.owlab.com:8080/jpetstoreLA/shop/index.do'),
         NVPair('timestamp', timestr()),
-        NVPair('elapsedTime', '73'),
+        NVPair('elapsedTime', str(self.elapsedTime)),
         NVPair('httpStatus', '200'), ),
       ( NVPair('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'), ))
 
@@ -847,7 +863,7 @@ class TestRunner:
     """POST feedUIEvent (request 1001)."""
     result = request1001.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_REQUEST'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('referrer', 'http://beta.owlab.com:8080/jpetstoreLA/shop/index.do'),
 	NVPair('method', 'GET'),
         NVPair('uuid', addUUID(grinder.threadNumber)),
@@ -880,11 +896,11 @@ class TestRunner:
     """POST feedUIEvent (request 1201)."""
     result = request1201.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_RESPONSE'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('uuid', getUUID(grinder.threadNumber)),
         NVPair('targetUrl', 'http://beta.owlab.com:8080/jpetstoreLA/shop/viewCategory.do?categoryId=BIRDS'),
         NVPair('timestamp', timestr()),
-        NVPair('elapsedTime', '155'),
+        NVPair('elapsedTime', str(self.elapsedTime)),
         NVPair('httpStatus', '200'), ),
       ( NVPair('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'), ))
 
@@ -940,7 +956,7 @@ class TestRunner:
     """POST feedUIEvent (request 1601)."""
     result = request1601.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_REQUEST'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('referrer', 'http://beta.owlab.com:8080/jpetstoreLA/shop/viewCategory.do?categoryId=BIRDS'),
 	NVPair('method', 'GET'),
         NVPair('uuid', addUUID(grinder.threadNumber)),
@@ -973,11 +989,11 @@ class TestRunner:
     """POST feedUIEvent (request 1801)."""
     result = request1801.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_RESPONSE'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('uuid', getUUID(grinder.threadNumber)),
         NVPair('targetUrl', 'http://beta.owlab.com:8080/jpetstoreLA/shop/viewProduct.do?productId=AV-SB-02'),
         NVPair('timestamp', timestr()),
-        NVPair('elapsedTime', '129'),
+        NVPair('elapsedTime', str(self.elapsedTime)),
         NVPair('httpStatus', '200'), ),
       ( NVPair('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'), ))
 
@@ -1039,7 +1055,7 @@ class TestRunner:
     """POST feedUIEvent (request 2201)."""
     result = request2201.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_REQUEST'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('referrer', 'http://beta.owlab.com:8080/jpetstoreLA/shop/viewProduct.do?productId=AV-SB-02'),
 	NVPair('method', 'GET'),
         NVPair('uuid', addUUID(grinder.threadNumber)),
@@ -1066,11 +1082,11 @@ class TestRunner:
     """POST feedUIEvent (request 2401)."""
     result = request2401.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_RESPONSE'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('uuid', getUUID(grinder.threadNumber)),
         NVPair('targetUrl', 'http://beta.owlab.com:8080/jpetstoreLA/shop/addItemToCart.do?workingItemId=EST-19'),
         NVPair('timestamp', timestr()),
-        NVPair('elapsedTime', '77'),
+        NVPair('elapsedTime', str(self.elapsedTime)),
         NVPair('httpStatus', '200'), ),
       ( NVPair('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'), ))
 
@@ -1126,7 +1142,7 @@ class TestRunner:
     """POST feedUIEvent (request 2801)."""
     result = request2801.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_REQUEST'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('referrer', 'http://beta.owlab.com:8080/jpetstoreLA/shop/addItemToCart.do?workingItemId=EST-19'),
 	NVPair('method', 'GET'),
         NVPair('uuid', addUUID(grinder.threadNumber)),
@@ -1151,11 +1167,11 @@ class TestRunner:
     """POST feedUIEvent (request 3001)."""
     result = request3001.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_RESPONSE'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('uuid', getUUID(grinder.threadNumber)),
         NVPair('targetUrl', 'http://beta.owlab.com:8080/jpetstoreLA/shop/index.do'),
         NVPair('timestamp', timestr()),
-        NVPair('elapsedTime', '447'),
+        NVPair('elapsedTime', str(self.elapsedTime)),
         NVPair('httpStatus', '200'), ),
       ( NVPair('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'), ))
 
@@ -1209,7 +1225,7 @@ class TestRunner:
     """POST feedUIEvent (request 3401)."""
     result = request3401.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_REQUEST'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('referrer', 'http://beta.owlab.com:8080/jpetstoreLA/shop/index.do'),
 	NVPair('method', 'GET'),
         NVPair('uuid', addUUID(grinder.threadNumber)),
@@ -1242,11 +1258,11 @@ class TestRunner:
     """POST feedUIEvent (request 3601)."""
     result = request3601.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_RESPONSE'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('uuid', getUUID(grinder.threadNumber)),
         NVPair('targetUrl', 'http://beta.owlab.com:8080/jpetstoreLA/shop/viewCategory.do?categoryId=REPTILES'),
         NVPair('timestamp', timestr()),
-        NVPair('elapsedTime', '326'),
+        NVPair('elapsedTime', str(self.elapsedTime)),
         NVPair('httpStatus', '200'), ),
       ( NVPair('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'), ))
 
@@ -1302,7 +1318,7 @@ class TestRunner:
     """POST feedUIEvent (request 4001)."""
     result = request4001.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_REQUEST'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('referrer', 'http://beta.owlab.com:8080/jpetstoreLA/shop/viewCategory.do?categoryId=REPTILES'),
 	NVPair('method', 'GET'),
         NVPair('uuid', addUUID(grinder.threadNumber)),
@@ -1337,11 +1353,11 @@ class TestRunner:
     """POST feedUIEvent (request 4201)."""
     result = request4201.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_RESPONSE'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('uuid', getUUID(grinder.threadNumber)),
         NVPair('targetUrl', 'http://beta.owlab.com:8080/jpetstoreLA/shop/viewProduct.do?productId=RP-SN-01'),
         NVPair('timestamp', timestr()),
-        NVPair('elapsedTime', '78'),
+        NVPair('elapsedTime', str(self.elapsedTime)),
         NVPair('httpStatus', '200'), ),
       ( NVPair('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'), ))
 
@@ -1396,7 +1412,7 @@ class TestRunner:
     """POST feedUIEvent (request 4601)."""
     result = request4601.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_REQUEST'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('referrer', 'http://beta.owlab.com:8080/jpetstoreLA/shop/viewProduct.do?productId=RP-SN-01'),
 	NVPair('method', 'GET'),
         NVPair('uuid', addUUID(grinder.threadNumber)),
@@ -1431,11 +1447,11 @@ class TestRunner:
     """POST feedUIEvent (request 4801)."""
     result = request4801.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_RESPONSE'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('uuid', getUUID(grinder.threadNumber)),
         NVPair('targetUrl', 'http://beta.owlab.com:8080/jpetstoreLA/shop/addItemToCart.do?workingItemId=EST-12'),
         NVPair('timestamp', timestr()),
-        NVPair('elapsedTime', '132'),
+        NVPair('elapsedTime', str(self.elapsedTime)),
         NVPair('httpStatus', '200'), ),
       ( NVPair('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'), ))
 
@@ -1491,7 +1507,7 @@ class TestRunner:
     """POST feedUIEvent (request 5201)."""
     result = request5201.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_REQUEST'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('referrer', 'http://beta.owlab.com:8080/jpetstoreLA/shop/addItemToCart.do?workingItemId=EST-12'),
 	NVPair('method', 'GET'),
         NVPair('uuid', addUUID(grinder.threadNumber)),
@@ -1516,11 +1532,11 @@ class TestRunner:
     """POST feedUIEvent (request 5401)."""
     result = request5401.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_RESPONSE'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('uuid', getUUID(grinder.threadNumber)),
         NVPair('targetUrl', 'http://beta.owlab.com:8080/jpetstoreLA/shop/index.do'),
         NVPair('timestamp', timestr()),
-        NVPair('elapsedTime', '88'),
+        NVPair('elapsedTime', str(self.elapsedTime)),
         NVPair('httpStatus', '200'), ),
       ( NVPair('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'), ))
 
@@ -1574,7 +1590,7 @@ class TestRunner:
     """POST feedUIEvent (request 5801)."""
     result = request5801.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_REQUEST'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('referrer', 'http://beta.owlab.com:8080/jpetstoreLA/shop/index.do'),
 	NVPair('method', 'GET'),
         NVPair('uuid', addUUID(grinder.threadNumber)),
@@ -1607,11 +1623,11 @@ class TestRunner:
     """POST feedUIEvent (request 6001)."""
     result = request6001.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_RESPONSE'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('uuid', getUUID(grinder.threadNumber)),
         NVPair('targetUrl', 'http://beta.owlab.com:8080/jpetstoreLA/shop/viewCategory.do?categoryId=CATS'),
         NVPair('timestamp', timestr()),
-        NVPair('elapsedTime', '184'),
+        NVPair('elapsedTime', str(self.elapsedTime)),
         NVPair('httpStatus', '200'), ),
       ( NVPair('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'), ))
 
@@ -1665,7 +1681,7 @@ class TestRunner:
     """POST feedUIEvent (request 6401)."""
     result = request6401.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_REQUEST'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('referrer', 'http://beta.owlab.com:8080/jpetstoreLA/shop/viewCategory.do?categoryId=CATS'),
 	NVPair('method', 'GET'),
         NVPair('uuid', addUUID(grinder.threadNumber)),
@@ -1698,11 +1714,11 @@ class TestRunner:
     """POST feedUIEvent (request 6601)."""
     result = request6601.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_RESPONSE'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('uuid', getUUID(grinder.threadNumber)),
         NVPair('targetUrl', 'http://beta.owlab.com:8080/jpetstoreLA/shop/viewProduct.do?productId=FL-DLH-02'),
         NVPair('timestamp', timestr()),
-        NVPair('elapsedTime', '52'),
+        NVPair('elapsedTime', str(self.elapsedTime)),
         NVPair('httpStatus', '200'), ),
       ( NVPair('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'), ))
 
@@ -1758,7 +1774,7 @@ class TestRunner:
     """POST feedUIEvent (request 7001)."""
     result = request7001.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_REQUEST'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('referrer', 'http://beta.owlab.com:8080/jpetstoreLA/shop/viewProduct.do?productId=FL-DLH-02'),
 	NVPair('method', 'GET'),
         NVPair('uuid', addUUID(grinder.threadNumber)),
@@ -1793,11 +1809,11 @@ class TestRunner:
     """POST feedUIEvent (request 7201)."""
     result = request7201.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_RESPONSE'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('uuid', getUUID(grinder.threadNumber)),
         NVPair('targetUrl', 'http://beta.owlab.com:8080/jpetstoreLA/shop/addItemToCart.do?workingItemId=EST-17'),
         NVPair('timestamp', timestr()),
-        NVPair('elapsedTime', '85'),
+        NVPair('elapsedTime', str(self.elapsedTime)),
         NVPair('httpStatus', '200'), ),
       ( NVPair('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'), ))
 
@@ -1853,7 +1869,7 @@ class TestRunner:
     """POST feedUIEvent (request 7601)."""
     result = request7601.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_REQUEST'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('referrer', 'http://beta.owlab.com:8080/jpetstoreLA/shop/addItemToCart.do?workingItemId=EST-17'),
 	NVPair('method', 'GET'),
         NVPair('uuid', addUUID(grinder.threadNumber)),
@@ -1880,11 +1896,11 @@ class TestRunner:
     """POST feedUIEvent (request 7801)."""
     result = request7801.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_RESPONSE'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('uuid', getUUID(grinder.threadNumber)),
         NVPair('targetUrl', 'http://beta.owlab.com:8080/jpetstoreLA/shop/checkout.do'),
         NVPair('timestamp', timestr()),
-        NVPair('elapsedTime', '81'),
+        NVPair('elapsedTime', str(self.elapsedTime)),
         NVPair('httpStatus', '200'), ),
       ( NVPair('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'), ))
 
@@ -1946,7 +1962,7 @@ class TestRunner:
     """POST feedUIEvent (request 8201)."""
     result = request8201.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_REQUEST'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('referrer', 'http://beta.owlab.com:8080/jpetstoreLA/shop/checkout.do'),
 	NVPair('method', 'GET'),
         NVPair('uuid', addUUID(grinder.threadNumber)),
@@ -1973,11 +1989,11 @@ class TestRunner:
     """POST feedUIEvent (request 8401)."""
     result = request8401.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_RESPONSE'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('uuid', getUUID(grinder.threadNumber)),
         NVPair('targetUrl', 'http://beta.owlab.com:8080/jpetstoreLA/shop/newOrder.do'),
         NVPair('timestamp', timestr()),
-        NVPair('elapsedTime', '64'),
+        NVPair('elapsedTime', str(self.elapsedTime)),
         NVPair('httpStatus', '200'), ),
       ( NVPair('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'), ))
 
@@ -2109,7 +2125,7 @@ class TestRunner:
     """POST feedUIEvent (request 9301)."""
     result = request9301.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_REQUEST'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('referrer', 'http://beta.owlab.com:8080/jpetstoreLA/shop/newOrder.do'),
 	NVPair('method', 'GET'),
         NVPair('uuid', addUUID(grinder.threadNumber)),
@@ -2138,11 +2154,11 @@ class TestRunner:
     """POST feedUIEvent (request 9501)."""
     result = request9501.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_RESPONSE'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('uuid', getUUID(grinder.threadNumber)),
         NVPair('targetUrl', 'http://beta.owlab.com:8080/jpetstoreLA/shop/newOrder.do?_finish=true'),
         NVPair('timestamp', timestr()),
-        NVPair('elapsedTime', '157'),
+        NVPair('elapsedTime', str(self.elapsedTime)),
         NVPair('httpStatus', '200'), ),
       ( NVPair('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'), ))
 
@@ -2198,7 +2214,7 @@ class TestRunner:
     """POST feedUIEvent (request 9901)."""
     result = request9901.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_REQUEST'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('referrer', 'http://beta.owlab.com:8080/jpetstoreLA/shop/newOrder.do?_finish=true'),
 	NVPair('method', 'GET'),
         NVPair('uuid', addUUID(grinder.threadNumber)),
@@ -2230,11 +2246,11 @@ class TestRunner:
     """POST feedUIEvent (request 10101)."""
     result = request10101.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_RESPONSE'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('uuid', getUUID(grinder.threadNumber)),
         NVPair('targetUrl', 'http://beta.owlab.com:8080/jpetstoreLA/shop/viewCategory.do?categoryId=CATS'),
         NVPair('timestamp', timestr()),
-        NVPair('elapsedTime', '129'),
+        NVPair('elapsedTime', str(self.elapsedTime)),
         NVPair('httpStatus', '200'), ),
       ( NVPair('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'), ))
 
@@ -2288,7 +2304,7 @@ class TestRunner:
     """POST feedUIEvent (request 10501)."""
     result = request10501.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_REQUEST'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('referrer', 'http://beta.owlab.com:8080/jpetstoreLA/shop/viewCategory.do?categoryId=CATS'),
 	NVPair('method', 'GET'),
         NVPair('uuid', addUUID(grinder.threadNumber)),
@@ -2323,11 +2339,11 @@ class TestRunner:
     """POST feedUIEvent (request 10701)."""
     result = request10701.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_RESPONSE'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('uuid', getUUID(grinder.threadNumber)),
         NVPair('targetUrl', 'http://beta.owlab.com:8080/jpetstoreLA/shop/viewProduct.do?productId=FL-DSH-01'),
         NVPair('timestamp', timestr()),
-        NVPair('elapsedTime', '162'),
+        NVPair('elapsedTime', str(self.elapsedTime)),
         NVPair('httpStatus', '200'), ),
       ( NVPair('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'), ))
 
@@ -2383,7 +2399,7 @@ class TestRunner:
     """POST feedUIEvent (request 11101)."""
     result = request11101.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_REQUEST'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('referrer', 'http://beta.owlab.com:8080/jpetstoreLA/shop/viewProduct.do?productId=FL-DSH-01'),
 	NVPair('method', 'GET'),
         NVPair('uuid', addUUID(grinder.threadNumber)),
@@ -2419,11 +2435,11 @@ class TestRunner:
     """POST feedUIEvent (request 11301)."""
     result = request11301.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_RESPONSE'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('uuid', getUUID(grinder.threadNumber)),
         NVPair('targetUrl', 'http://beta.owlab.com:8080/jpetstoreLA/shop/addItemToCart.do?workingItemId=EST-15'),
         NVPair('timestamp', timestr()),
-        NVPair('elapsedTime', '178'),
+        NVPair('elapsedTime', str(self.elapsedTime)),
         NVPair('httpStatus', '200'), ),
       ( NVPair('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'), ))
 
@@ -2483,7 +2499,7 @@ class TestRunner:
     """POST feedUIEvent (request 11701)."""
     result = request11701.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_REQUEST'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('referrer', 'http://beta.owlab.com:8080/jpetstoreLA/shop/addItemToCart.do?workingItemId=EST-15'),
 	NVPair('method', 'GET'),
         NVPair('uuid', addUUID(grinder.threadNumber)),
@@ -2515,11 +2531,11 @@ class TestRunner:
     """POST feedUIEvent (request 11901)."""
     result = request11901.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_RESPONSE'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('uuid', getUUID(grinder.threadNumber)),
         NVPair('targetUrl', 'http://beta.owlab.com:8080/jpetstoreLA/shop/viewCart.do?page=next'),
         NVPair('timestamp', timestr()),
-        NVPair('elapsedTime', '192'),
+        NVPair('elapsedTime', str(self.elapsedTime)),
         NVPair('httpStatus', '200'), ),
       ( NVPair('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'), ))
 
@@ -2574,7 +2590,7 @@ class TestRunner:
     """POST feedUIEvent (request 12301)."""
     result = request12301.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_REQUEST'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('referrer', 'http://beta.owlab.com:8080/jpetstoreLA/shop/viewCart.do?page=next'),
 	NVPair('method', 'GET'),
         NVPair('uuid', addUUID(grinder.threadNumber)),
@@ -2599,11 +2615,11 @@ class TestRunner:
     """POST feedUIEvent (request 12501)."""
     result = request12501.POST('/feedUIEvent',
       ( NVPair('stage', 'HTTP_RESPONSE'),
-        NVPair('clientId', clientIp),
+        NVPair('clientId', self.clientIp),
         NVPair('uuid', getUUID(grinder.threadNumber)),
         NVPair('targetUrl', 'http://beta.owlab.com:8080/jpetstoreLA/shop/signoff.do'),
         NVPair('timestamp', timestr()),
-        NVPair('elapsedTime', '177'),
+        NVPair('elapsedTime', str(self.elapsedTime)),
         NVPair('httpStatus', '200'), ),
       ( NVPair('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'), ))
 
@@ -2657,250 +2673,273 @@ class TestRunner:
 
   def __call__(self):
     """Called for every run performed by the worker thread."""
+    self.clientIp = getClientIp()
+
     self.page1()      # GET / (requests 101-105)
 
     grinder.sleep(676)
     self.page2()      # GET whatIsMyIPAddress (request 201)
     self.page3()      # GET sign-in.gif (requests 301-309)
 
-    grinder.sleep(1815)
     self.page5()      # POST feedUIEvent (request 501)
+    grinder.sleep(1815)
     self.page4()      # GET index.do (request 401)
 
-    grinder.sleep(39)
+    self.elapsedTime = grinder.statistics.forLastTest.time
+
     self.page6()      # POST feedUIEvent (request 601)
+    grinder.sleep(39)
     self.page7()      # GET fish_icon.gif (requests 701-712)
 
-    grinder.sleep(19)
     self.page8()      # GET whatIsMyIPAddress (request 801)
+    grinder.sleep(19)
     self.page9()      # GET jquery-1.10.2.js (requests 901-903)
 
-    grinder.sleep(2526)
     self.page10()     # POST feedUIEvent (request 1001)
+    grinder.sleep(2526)
     self.page11()     # GET viewCategory.do (request 1101)
 
-    grinder.sleep(53)
+    self.elapsedTime = grinder.statistics.forLastTest.time
+
     self.page12()     # POST feedUIEvent (request 1201)
+    grinder.sleep(53)
     self.page13()     # GET fresto_getip.js (requests 1301-1302)
     self.page14()     # GET whatIsMyIPAddress (request 1401)
 
-    grinder.sleep(172)
     self.page15()     # GET randomUUID.js (requests 1501-1502)
+    grinder.sleep(172)
 
-    grinder.sleep(1012)
     self.page16()     # POST feedUIEvent (request 1601)
+    grinder.sleep(1012)
     self.page17()     # GET viewProduct.do (request 1701)
+    self.elapsedTime = grinder.statistics.forLastTest.time
 
-    grinder.sleep(48)
     self.page18()     # POST feedUIEvent (request 1801)
+    grinder.sleep(48)
     self.page19()     # GET button_add_to_cart.gif (requests 1901-1902)
 
-    grinder.sleep(11)
     self.page20()     # GET whatIsMyIPAddress (request 2001)
+    grinder.sleep(11)
     self.page21()     # GET jquery-1.10.2.js (requests 2101-2103)
 
-    grinder.sleep(1308)
     self.page22()     # POST feedUIEvent (request 2201)
+    grinder.sleep(1308)
     self.page23()     # GET addItemToCart.do (request 2301)
+    self.elapsedTime = grinder.statistics.forLastTest.time
 
-    grinder.sleep(23)
     self.page24()     # POST feedUIEvent (request 2401)
+    grinder.sleep(23)
     self.page25()     # GET fresto_getip.js (request 2501)
 
-    grinder.sleep(17)
     self.page26()     # GET whatIsMyIPAddress (request 2601)
+    grinder.sleep(17)
     self.page27()     # GET jquery-1.10.2.js (requests 2701-2703)
 
-    grinder.sleep(7417)
     self.page28()     # POST feedUIEvent (request 2801)
+    grinder.sleep(7417)
     self.page29()     # GET index.do (request 2901)
+    self.elapsedTime = grinder.statistics.forLastTest.time
 
-    grinder.sleep(70)
     self.page30()     # POST feedUIEvent (request 3001)
+    grinder.sleep(70)
     self.page31()     # GET fresto_getip.js (request 3101)
 
-    grinder.sleep(29)
     self.page32()     # GET whatIsMyIPAddress (request 3201)
+    grinder.sleep(29)
     self.page33()     # GET jquery-1.10.2.js (requests 3301-3303)
 
-    grinder.sleep(790)
     self.page34()     # POST feedUIEvent (request 3401)
+    grinder.sleep(790)
     self.page35()     # GET viewCategory.do (request 3501)
+    self.elapsedTime = grinder.statistics.forLastTest.time
 
-    grinder.sleep(38)
     self.page36()     # POST feedUIEvent (request 3601)
+    grinder.sleep(38)
     self.page37()     # GET fresto_getip.js (request 3701)
 
-    grinder.sleep(25)
     self.page38()     # GET whatIsMyIPAddress (request 3801)
+    grinder.sleep(25)
     self.page39()     # GET jquery-1.10.2.js (requests 3901-3903)
 
-    grinder.sleep(18816)
     self.page40()     # POST feedUIEvent (request 4001)
+    grinder.sleep(18816)
     self.page41()     # GET viewProduct.do (request 4101)
+    self.elapsedTime = grinder.statistics.forLastTest.time
 
-    grinder.sleep(22)
     self.page42()     # POST feedUIEvent (request 4201)
+    grinder.sleep(22)
     self.page43()     # GET fresto_getip.js (requests 4301-4302)
     self.page44()     # GET whatIsMyIPAddress (request 4401)
 
-    grinder.sleep(148)
     self.page45()     # GET randomUUID.js (requests 4501-4502)
+    grinder.sleep(148)
 
-    grinder.sleep(2604)
     self.page46()     # POST feedUIEvent (request 4601)
+    grinder.sleep(2604)
     self.page47()     # GET addItemToCart.do (request 4701)
+    self.elapsedTime = grinder.statistics.forLastTest.time
 
-    grinder.sleep(42)
     self.page48()     # POST feedUIEvent (request 4801)
+    grinder.sleep(42)
     self.page49()     # GET fresto_getip.js (request 4901)
     self.page50()     # GET whatIsMyIPAddress (request 5001)
     self.page51()     # GET jquery-1.10.2.js (requests 5101-5103)
 
-    grinder.sleep(1608)
     self.page52()     # POST feedUIEvent (request 5201)
+    grinder.sleep(1608)
     self.page53()     # GET index.do (request 5301)
+    self.elapsedTime = grinder.statistics.forLastTest.time
 
-    grinder.sleep(58)
     self.page54()     # POST feedUIEvent (request 5401)
+    grinder.sleep(58)
     self.page55()     # GET fresto_getip.js (request 5501)
     self.page56()     # GET whatIsMyIPAddress (request 5601)
     self.page57()     # GET jquery-1.10.2.js (requests 5701-5703)
 
-    grinder.sleep(1118)
     self.page58()     # POST feedUIEvent (request 5801)
+    grinder.sleep(1118)
     self.page59()     # GET viewCategory.do (request 5901)
+    self.elapsedTime = grinder.statistics.forLastTest.time
 
-    grinder.sleep(86)
     self.page60()     # POST feedUIEvent (request 6001)
+    grinder.sleep(86)
     self.page61()     # GET fresto_getip.js (request 6101)
 
-    grinder.sleep(20)
     self.page62()     # GET whatIsMyIPAddress (request 6201)
+    grinder.sleep(20)
     self.page63()     # GET jquery-1.10.2.js (requests 6301-6303)
 
-    grinder.sleep(1390)
     self.page64()     # POST feedUIEvent (request 6401)
+    grinder.sleep(1390)
     self.page65()     # GET viewProduct.do (request 6501)
+    self.elapsedTime = grinder.statistics.forLastTest.time
 
-    grinder.sleep(28)
     self.page66()     # POST feedUIEvent (request 6601)
+    grinder.sleep(28)
     self.page67()     # GET fresto_getip.js (requests 6701-6702)
     self.page68()     # GET whatIsMyIPAddress (request 6801)
 
-    grinder.sleep(150)
     self.page69()     # GET randomUUID.js (requests 6901-6902)
+    grinder.sleep(150)
 
-    grinder.sleep(1309)
     self.page70()     # POST feedUIEvent (request 7001)
+    grinder.sleep(1309)
     self.page71()     # GET addItemToCart.do (request 7101)
+    self.elapsedTime = grinder.statistics.forLastTest.time
 
-    grinder.sleep(23)
     self.page72()     # POST feedUIEvent (request 7201)
+    grinder.sleep(23)
     self.page73()     # GET fresto_getip.js (request 7301)
 
-    grinder.sleep(14)
     self.page74()     # GET whatIsMyIPAddress (request 7401)
+    grinder.sleep(14)
     self.page75()     # GET jquery-1.10.2.js (requests 7501-7503)
 
-    grinder.sleep(1321)
     self.page76()     # POST feedUIEvent (request 7601)
+    grinder.sleep(1321)
     self.page77()     # GET checkout.do (request 7701)
+    self.elapsedTime = grinder.statistics.forLastTest.time
 
-    grinder.sleep(45)
     self.page78()     # POST feedUIEvent (request 7801)
+    grinder.sleep(45)
     self.page79()     # GET button_continue.gif (requests 7901-7902)
     self.page80()     # GET whatIsMyIPAddress (request 8001)
 
-    grinder.sleep(45)
     self.page81()     # GET jquery-1.10.2.js (requests 8101-8103)
+    grinder.sleep(45)
 
-    grinder.sleep(1278)
     self.page82()     # POST feedUIEvent (request 8201)
+    grinder.sleep(1278)
     self.page83()     # GET newOrder.do (request 8301)
+    self.elapsedTime = grinder.statistics.forLastTest.time
 
-    grinder.sleep(46)
     self.page84()     # POST feedUIEvent (request 8401)
+    grinder.sleep(46)
     self.page85()     # GET button_submit.gif (requests 8501-8504)
     self.page86()     # GET whatIsMyIPAddress (request 8601)
 
-    grinder.sleep(142)
     self.page87()     # GET randomUUID.js (requests 8701-8702)
+    grinder.sleep(142)
 
-    grinder.sleep(1494)
     self.page88()     # POST signon.do (requests 8801-8802)
+    grinder.sleep(1494)
 
-    grinder.sleep(166)
     self.page89()     # GET whatIsMyIPAddress (request 8901)
+    grinder.sleep(166)
     self.page90()     # GET my_account.gif (requests 9001-9003)
 
-    grinder.sleep(2967)
     self.page91()     # POST newOrder.do (request 9101)
+    grinder.sleep(2967)
 
-    grinder.sleep(71)
     self.page92()     # GET whatIsMyIPAddress (request 9201)
+    grinder.sleep(71)
 
-    grinder.sleep(2199)
     self.page93()     # POST feedUIEvent (request 9301)
+    grinder.sleep(2199)
     self.page94()     # GET newOrder.do (request 9401)
+    self.elapsedTime = grinder.statistics.forLastTest.time
 
-    grinder.sleep(53)
     self.page95()     # POST feedUIEvent (request 9501)
+    grinder.sleep(53)
     self.page96()     # GET fresto_getip.js (request 9601)
     self.page97()     # GET whatIsMyIPAddress (request 9701)
     self.page98()     # GET jquery-1.10.2.js (requests 9801-9803)
 
-    grinder.sleep(11291)
     self.page99()     # POST feedUIEvent (request 9901)
+    grinder.sleep(11291)
     self.page100()    # GET viewCategory.do (request 10001)
+    self.elapsedTime = grinder.statistics.forLastTest.time
 
-    grinder.sleep(61)
     self.page101()    # POST feedUIEvent (request 10101)
+    grinder.sleep(61)
     self.page102()    # GET fresto_getip.js (request 10201)
     self.page103()    # GET whatIsMyIPAddress (request 10301)
     self.page104()    # GET jquery-1.10.2.js (requests 10401-10403)
 
-    grinder.sleep(1516)
     self.page105()    # POST feedUIEvent (request 10501)
+    grinder.sleep(1516)
     self.page106()    # GET viewProduct.do (request 10601)
+    self.elapsedTime = grinder.statistics.forLastTest.time
 
-    grinder.sleep(54)
     self.page107()    # POST feedUIEvent (request 10701)
+    grinder.sleep(54)
     self.page108()    # GET fresto_getip.js (request 10801)
     self.page109()    # GET whatIsMyIPAddress (request 10901)
     self.page110()    # GET jquery-1.10.2.js (requests 11001-11003)
 
-    grinder.sleep(779)
     self.page111()    # POST feedUIEvent (request 11101)
+    grinder.sleep(779)
     self.page112()    # GET addItemToCart.do (request 11201)
+    self.elapsedTime = grinder.statistics.forLastTest.time
 
-    grinder.sleep(66)
     self.page113()    # POST feedUIEvent (request 11301)
+    grinder.sleep(66)
     self.page114()    # GET banner_dogs.gif (requests 11401-11402)
     self.page115()    # GET whatIsMyIPAddress (request 11501)
     self.page116()    # GET jquery-1.10.2.js (requests 11601-11603)
 
-    grinder.sleep(6964)
     self.page117()    # POST feedUIEvent (request 11701)
+    grinder.sleep(6964)
     self.page118()    # GET viewCart.do (request 11801)
+    self.elapsedTime = grinder.statistics.forLastTest.time
 
-    grinder.sleep(124)
     self.page119()    # POST feedUIEvent (request 11901)
+    grinder.sleep(124)
     self.page120()    # GET fresto_getip.js (requests 12001-12002)
 
-    grinder.sleep(34)
     self.page121()    # GET whatIsMyIPAddress (request 12101)
+    grinder.sleep(34)
 
-    grinder.sleep(156)
     self.page122()    # GET randomUUID.js (requests 12201-12202)
+    grinder.sleep(156)
 
-    grinder.sleep(5376)
     self.page123()    # POST feedUIEvent (request 12301)
     self.page124()    # GET signoff.do (request 12401)
+    self.elapsedTime = grinder.statistics.forLastTest.time
 
-    grinder.sleep(71)
     self.page125()    # POST feedUIEvent (request 12501)
     self.page126()    # GET fresto_getip.js (request 12601)
+    grinder.sleep(71)
     self.page127()    # GET whatIsMyIPAddress (request 12701)
     self.page128()    # GET jquery-1.10.2.js (requests 12801-12803)
 

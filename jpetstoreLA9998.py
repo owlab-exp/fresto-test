@@ -18,7 +18,7 @@ def timestr():
 appHost = 'beta.owlab.com'
 appPort = '8080'
 frestoHost = 'fresto1.owlab.com'
-frestoPort = '9999'
+frestoPort = '9998'
 clientIp = '180.229.124.46' #This IP Addres should be of load generator
 
 # UUID bucket for each thread to create and reuse UUID
